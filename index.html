@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<meta name="theme-color" content="#ff6ec7" />
+<title>✨ The Forever Slambook ✨</title>
+<meta name="description" content="A nostalgic + quirky digital slambook. Fill it. Send it. Catch up forever." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Fredoka:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<style>
+  :root{
+    --pink:#ffa6d5;
+    --pink-deep:#ff6ec7;
+    --purple:#c0a4ff;
+    --purple-deep:#a06bff;
+    --blue:#9fe0ff;
+    --yellow:#ffe27a;
+    --mint:#a7ffd8;
+    --peach:#ffc8b0;
+    --lavender:#e9defb;
+    --gold:#f7c873;
+    --gold-2:#fff0c2;
+    --ink:#3a2c52;
+    --paper:#fffaf4;
+    --line:#f0e3ff;
+    --shadow:0 14px 38px rgba(150,90,210,.20);
+    --glow:0 0 0 1px rgba(255,255,255,.6), 0 8px 26px rgba(192,164,255,.35);
+    --radius:24px;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;padding:0}
+  body{
+    font-family:'Fredoka',system-ui,sans-serif;
+    color:var(--ink);
+    background:
+      radial-gradient(1200px 600px at 10% -10%, #ffe4f4 0, transparent 60%),
+      radial-gradient(900px 500px at 110% 8%, #ece1ff 0, transparent 55%),
+      radial-gradient(700px 500px at 50% 120%, #d8f7ff 0, transparent 60%),
+      linear-gradient(160deg,#fff5fb 0%, #f6f0ff 45%, #ecfdff 100%);
+    min-height:100vh;
+    overflow-x:hidden;
+  }
+  /* sparkly bling overlay */
+  body:before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.5;
+    background-image:
+      radial-gradient(2px 2px at 20% 30%, #fff 50%, transparent),
+      radial-gradient(2px 2px at 80% 20%, var(--gold) 50%, transparent),
+      radial-gradient(1.5px 1.5px at 65% 65%, #fff 50%, transparent),
+      radial-gradient(2px 2px at 35% 80%, var(--pink-deep) 50%, transparent),
+      radial-gradient(1.5px 1.5px at 90% 70%, #fff 50%, transparent),
+      radial-gradient(2px 2px at 12% 60%, var(--purple-deep) 50%, transparent);
+    animation:twinkle 4s ease-in-out infinite;}
+  @keyframes twinkle{0%,100%{opacity:.35}50%{opacity:.7}}
+  .floaty{position:fixed;font-size:26px;opacity:.55;pointer-events:none;animation:floaty 9s ease-in-out infinite;z-index:0}
+  @keyframes floaty{0%,100%{transform:translateY(0) rotate(-6deg)}50%{transform:translateY(-18px) rotate(8deg)}}
+  .wrap{max-width:620px;margin:0 auto;padding:18px 16px 60px;position:relative;z-index:1}
+
+  /* ---------- Header ---------- */
+  .hero{
+    text-align:center;padding:30px 18px 24px;border-radius:var(--radius);
+    background:linear-gradient(135deg,#ffd1ec 0%, #e3c8ff 45%, #c8e8ff 100%);
+    color:#fff;box-shadow:var(--shadow);position:relative;overflow:hidden;
+    border:3px solid rgba(255,255,255,.85);
+  }
+  .hero:before{content:"";position:absolute;inset:0;background:
+    repeating-linear-gradient(45deg, rgba(255,255,255,.10) 0 14px, transparent 14px 28px);}
+  /* glossy sheen sweep */
+  .hero:after{content:"";position:absolute;top:0;left:-60%;width:50%;height:100%;
+    background:linear-gradient(105deg, transparent, rgba(255,255,255,.55), transparent);
+    transform:skewX(-20deg);animation:sheen 5.5s ease-in-out infinite;}
+  @keyframes sheen{0%{left:-60%}45%,100%{left:130%}}
+  .hero .tag{font-size:13px;letter-spacing:3px;text-transform:uppercase;font-weight:700;
+    color:#fff;text-shadow:0 1px 6px rgba(160,90,200,.4);position:relative}
+  .hero h1{font-family:'Caveat',cursive;font-size:52px;margin:6px 0 4px;line-height:1;position:relative;
+    background:linear-gradient(92deg,#ff7ec9,#a06bff,#5ec8ff,#ffb86b,#ff7ec9);
+    background-size:260% auto;-webkit-background-clip:text;background-clip:text;
+    -webkit-text-fill-color:transparent;
+    filter:drop-shadow(0 2px 6px rgba(255,255,255,.6));
+    animation:shimmer 6s linear infinite;}
+  @keyframes shimmer{to{background-position:260% center}}
+  .hero h1 .spk{-webkit-text-fill-color:initial;background:none;font-size:38px;vertical-align:middle}
+  .hero p{margin:8px auto 0;max-width:420px;font-size:15px;color:#6a4f86;font-weight:500;position:relative}
+  .stickers{display:flex;gap:8px;justify-content:center;margin-top:16px;flex-wrap:wrap;position:relative}
+  .stickers span{background:rgba(255,255,255,.55);border:1.5px solid rgba(255,255,255,.9);
+    padding:6px 13px;border-radius:999px;font-size:13px;font-weight:600;color:#7a5a9e;
+    backdrop-filter:blur(6px);box-shadow:0 4px 14px rgba(192,164,255,.3)}
+
+  /* ---------- Progress ---------- */
+  .progress-wrap{position:sticky;top:0;z-index:5;padding:10px 0 6px;margin-top:14px;background:linear-gradient(180deg, rgba(255,248,240,.95), rgba(255,248,240,0))}
+  .progress-track{height:13px;background:#fff;border:2px solid var(--line);border-radius:999px;overflow:hidden;box-shadow:inset 0 1px 4px rgba(120,60,180,.1), 0 2px 8px rgba(192,164,255,.2)}
+  .progress-fill{height:100%;width:0;background:linear-gradient(90deg,#a7ffd8,#9fe0ff,#c0a4ff,#ffa6d5,#ffe27a);background-size:200% auto;animation:shimmer 4s linear infinite;transition:width .4s ease}
+  .progress-label{font-size:12px;text-align:center;margin-top:5px;color:#8a76ad;font-weight:600}
+
+  /* ---------- Cards / questions ---------- */
+  .card{
+    background:linear-gradient(180deg,#fffdfb,var(--paper));
+    border:2px solid transparent;
+    background-clip:padding-box;
+    border-radius:var(--radius);
+    padding:20px 16px 16px;margin:20px 0;box-shadow:var(--shadow);position:relative;
+  }
+  /* pastel gradient glow ring */
+  .card:after{content:"";position:absolute;inset:-2px;border-radius:var(--radius);z-index:-1;
+    background:linear-gradient(135deg,var(--pink),var(--purple),var(--blue),var(--mint));
+    opacity:.5;}
+  .card:before{content:attr(data-emoji);position:absolute;top:-18px;left:18px;font-size:26px;
+    background:linear-gradient(135deg,#fff,var(--gold-2));border:2px solid var(--gold);border-radius:50%;
+    width:48px;height:48px;display:grid;place-items:center;
+    box-shadow:0 6px 16px rgba(247,200,115,.4), inset 0 1px 2px #fff}
+  .q{font-weight:600;font-size:16px;margin:10px 0 10px;padding-left:2px}
+  .q small{display:block;font-weight:400;color:#9b8bb5;font-size:12.5px;margin-top:2px}
+  input[type=text],input[type=date],textarea,select{
+    width:100%;font-family:'Space Grotesk',sans-serif;font-size:15.5px;color:var(--ink);
+    background:#fff;border:2px solid var(--line);border-radius:14px;padding:12px 14px;outline:none;
+    transition:border-color .15s, box-shadow .15s;
+  }
+  textarea{resize:vertical;min-height:74px;line-height:1.45}
+  input:focus,textarea:focus,select:focus{border-color:var(--purple);box-shadow:0 0 0 4px rgba(160,107,255,.15)}
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  @media(max-width:430px){.row2{grid-template-columns:1fr}}
+
+  /* avatar picker */
+  .avatar-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+  .avatar-row button{font-size:24px;width:46px;height:46px;border-radius:14px;border:2px solid var(--line);
+    background:#fff;cursor:pointer;transition:transform .12s, border-color .12s}
+  .avatar-row button:hover{transform:translateY(-3px) scale(1.05)}
+  .avatar-row button.sel{border-color:var(--pink-deep);background:linear-gradient(135deg,#fff0f8,#f3ecff);box-shadow:0 0 0 4px rgba(255,166,213,.3), 0 6px 14px rgba(192,164,255,.3)}
+
+  /* chips (multi-pick) */
+  .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
+  .chips button{border:2px solid var(--line);background:#fff;border-radius:999px;padding:8px 13px;
+    font-family:'Fredoka';font-size:13.5px;cursor:pointer;color:var(--ink);transition:all .12s}
+  .chips button.sel{background:linear-gradient(135deg,var(--pink),var(--purple),var(--blue));background-size:160% auto;border-color:transparent;color:#fff;font-weight:600;box-shadow:0 5px 14px rgba(192,164,255,.45);animation:shimmer 4s linear infinite}
+  .pick-label{font-size:11.5px;color:#a596be;font-weight:500;margin:12px 0 2px;padding-left:2px}
+
+  /* slider */
+  .slider-wrap{display:flex;align-items:center;gap:12px;margin-top:6px}
+  input[type=range]{flex:1;accent-color:var(--purple)}
+  .slider-val{font-weight:700;min-width:46px;text-align:center;font-size:18px}
+
+  /* ---------- Buttons ---------- */
+  .actions{display:flex;flex-direction:column;gap:12px;margin-top:24px}
+  .btn{border:none;border-radius:18px;padding:16px;font-family:'Fredoka';font-size:17px;font-weight:600;
+    cursor:pointer;color:#fff;box-shadow:var(--shadow);transition:transform .12s, filter .12s;display:flex;
+    align-items:center;justify-content:center;gap:8px;position:relative;overflow:hidden}
+  /* shine sweep */
+  .btn:after{content:"";position:absolute;top:0;left:-70%;width:45%;height:100%;
+    background:linear-gradient(105deg,transparent,rgba(255,255,255,.6),transparent);
+    transform:skewX(-20deg);animation:sheen 4s ease-in-out infinite}
+  .btn:active{transform:scale(.97)}
+  .btn-primary{background:linear-gradient(135deg,var(--pink-deep),var(--purple-deep),var(--blue));background-size:180% auto;animation:shimmer 5s linear infinite}
+  .btn-ghost{background:#fff;color:var(--purple-deep);border:2px solid var(--purple);box-shadow:var(--glow)}
+  .btn-ghost:after{display:none}
+  .btn-yellow{background:linear-gradient(135deg,var(--gold),var(--yellow),var(--peach));background-size:180% auto;color:#7a5200;animation:shimmer 5s linear infinite}
+
+  .hint{font-size:12.5px;color:#9b8bb5;text-align:center;margin-top:4px;line-height:1.5}
+
+  /* ---------- Result card (sharable) ---------- */
+  .result{margin-top:18px}
+  #shareCard{
+    background:linear-gradient(160deg,#fffaf4,#fff 60%,#fdf6ff);border:3px solid #fff;border-radius:24px;
+    box-shadow:var(--shadow), 0 0 0 2px var(--gold-2);padding:22px 18px;position:relative;overflow:hidden;
+  }
+  #shareCard:before{content:"";position:absolute;inset:0;background:
+    radial-gradient(400px 220px at 100% 0, rgba(255,166,213,.18), transparent 60%),
+    radial-gradient(400px 220px at 0 100%, rgba(159,224,255,.2), transparent 60%),
+    radial-gradient(300px 200px at 50% 120%, rgba(247,200,115,.16), transparent 60%);}
+  .sc-head{display:flex;align-items:center;gap:12px;border-bottom:2px dashed var(--line);padding-bottom:12px;margin-bottom:12px;position:relative}
+  .sc-ava{font-size:42px;width:64px;height:64px;display:grid;place-items:center;background:linear-gradient(135deg,#fff,var(--gold-2));border:3px solid var(--gold);border-radius:50%;box-shadow:0 6px 16px rgba(247,200,115,.35)}
+  .sc-name{font-family:'Caveat';font-size:36px;line-height:.95;
+    background:linear-gradient(92deg,var(--pink-deep),var(--purple-deep),var(--blue));
+    -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+  .sc-sub{font-size:12.5px;color:#9b8bb5}
+  .sc-grid{display:grid;gap:10px;position:relative}
+  .sc-item{background:#fff;border:2px solid var(--line);border-radius:14px;padding:10px 12px}
+  .sc-q{font-size:11.5px;text-transform:uppercase;letter-spacing:1px;color:var(--purple);font-weight:600}
+  .sc-a{font-family:'Space Grotesk';font-size:15px;margin-top:3px;word-break:break-word;white-space:pre-wrap}
+  .sc-foot{text-align:center;font-size:12px;color:#9b8bb5;margin-top:14px;position:relative}
+  .hidden{display:none}
+
+  footer{text-align:center;margin-top:34px;font-size:12.5px;color:#9b8bb5}
+  footer b{color:var(--purple)}
+
+  .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(120px);
+    background:var(--ink);color:#fff;padding:12px 20px;border-radius:999px;font-size:14px;
+    box-shadow:var(--shadow);transition:transform .35s cubic-bezier(.2,1.4,.4,1);z-index:50}
+  .toast.show{transform:translateX(-50%) translateY(0)}
+</style>
+</head>
+<body>
+  <div class="floaty" style="top:8%;left:6%">🌸</div>
+  <div class="floaty" style="top:22%;right:8%;animation-delay:1.2s">⭐</div>
+  <div class="floaty" style="top:55%;left:4%;animation-delay:2.4s">🦄</div>
+  <div class="floaty" style="top:70%;right:6%;animation-delay:.6s">💌</div>
+  <div class="floaty" style="top:40%;right:14%;animation-delay:3s">🪩</div>
+
+  <div class="wrap">
+    <!-- HERO -->
+    <header class="hero">
+      <div class="tag">est. way back when ✏️</div>
+      <h1><span class="spk">✨</span> The Forever Slambook <span class="spk">💖</span></h1>
+      <p>We grew up, got busy, scattered everywhere. Let's catch up the old-school way — fill this out & send it back to me! 💕</p>
+      <div class="stickers">
+        <span>✨ no rush</span><span>🤪 be honest</span><span>📸 add vibes</span>
+      </div>
+    </header>
+
+    <!-- PROGRESS -->
+    <div class="progress-wrap">
+      <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+      <div class="progress-label" id="progressLabel">0% filled — let's gooo 🚀</div>
+    </div>
+
+    <!-- FORM -->
+    <form id="slambook" autocomplete="off">
+
+      <div class="card" data-emoji="🧑‍🚀">
+        <div class="q">First things first — who's filling this?</div>
+        <div class="row2">
+          <input type="text" data-q="Name / Nickname" placeholder="Your name or nickname" required />
+          <input type="text" data-q="Where are you now?" placeholder="City you're in now 🌍" />
+        </div>
+        <div class="q" style="margin-top:14px">Pick your avatar of the day</div>
+        <div class="avatar-row" id="avatars" data-q="Avatar"></div>
+      </div>
+
+      <div class="card" data-emoji="⏳">
+        <div class="q">How's life treating you in 3 words?<small>Quick gut-check, no overthinking</small></div>
+        <input type="text" data-q="Life in 3 words" id="q-life3" placeholder="e.g. chaotic, caffeinated, content" />
+        <div class="pick-label">or just tap one 👇</div>
+        <div class="chips quick" data-target="#q-life3">
+          <button type="button">busy but blessed 🙏</button>
+          <button type="button">tired but trying 😴</button>
+          <button type="button">happy &amp; thriving 🌟</button>
+          <button type="button">chaotic but fun 🎢</button>
+          <button type="button">calm &amp; content 🍃</button>
+        </div>
+      </div>
+
+      <div class="card" data-emoji="🎢">
+        <div class="q">What are you actually up to these days?<small>Job, hustle, studies, parenting, finding yourself — anything goes</small></div>
+        <textarea data-q="What I'm up to" id="q-upto" placeholder="Spill the tea ☕"></textarea>
+        <div class="pick-label">or just tap one 👇</div>
+        <div class="chips quick" data-target="#q-upto">
+          <button type="button">Working a 9-to-5 💼</button>
+          <button type="button">Freelancing / hustling 🧑‍💻</button>
+          <button type="button">Still studying 📚</button>
+          <button type="button">Parenting full-time 🍼</button>
+          <button type="button">Building my own thing 🚀</button>
+          <button type="button">Figuring it out 🤷</button>
+        </div>
+      </div>
+
+      <div class="card" data-emoji="�">
+        <div class="q">Real check-in — how are you <em>actually</em> doing?<small>No filter. If it's a rough patch, tell me — we'll talk it out 💛</small></div>
+        <div class="chips" data-q="How I'm really doing" data-multi="1">
+          <button type="button">genuinely great 🌞</button>
+          <button type="button">pretty good 🙂</button>
+          <button type="button">just okay 😐</button>
+          <button type="button">stressed / burnt out 😮‍💨</button>
+          <button type="button">a bit lonely 🥺</button>
+          <button type="button">low-key struggling 🌧️</button>
+          <button type="button">anxious lately 😰</button>
+          <button type="button">healing & getting there 🌱</button>
+        </div>
+        <div class="q" style="margin-top:14px">Anything you want to talk about? I'm here.<small>Totally optional — vent, share, or skip</small></div>
+        <textarea data-q="What's on my mind" placeholder="Spill it, or leave blank 🤍"></textarea>
+      </div>
+
+      <div class="card" data-emoji="💞">
+        <div class="q">Love life status?<small>Spill the romance tea ☕</small></div>
+        <select data-q="Relationship status">
+          <option value="">Pick one 👀</option>
+          <option>Happily single 🕊️</option>
+          <option>Talking to someone 👀</option>
+          <option>In a relationship 💑</option>
+          <option>Engaged 💍</option>
+          <option>Married 👰</option>
+          <option>Married with kids 👨‍👩‍👧</option>
+          <option>It's complicated 🙃</option>
+          <option>Not telling 🤐</option>
+        </select>
+        <input type="text" data-q="The story there" placeholder="Name? How'd it happen? Give me details 💕" style="margin-top:10px" />
+      </div>
+
+      <div class="card" data-emoji="📼">
+        <div class="q">Throwback! Our funniest / most iconic memory together?<small>The one we still bring up at every reunion</small></div>
+        <textarea data-q="Our iconic memory" placeholder="You know the one... 😂"></textarea>
+      </div>
+
+      <div class="card" data-emoji="🎧">
+        <div class="q">Song stuck in your head right now</div>
+        <input type="text" data-q="Current song" id="q-song" placeholder="🎵 Title – Artist" />
+        <div class="pick-label">or just tap one 👇</div>
+        <div class="chips quick" data-target="#q-song">
+          <button type="button">Whatever's trending 🔥</button>
+          <button type="button">2000s throwbacks 📻</button>
+          <button type="button">My comfort playlist 🎶</button>
+          <button type="button">Total silence rn 🤫</button>
+        </div>
+      </div>
+
+      <div class="card" data-emoji="📱">
+        <div class="q">Most-used app &amp; last thing you Googled?</div>
+        <div class="row2">
+          <input type="text" data-q="Most-used app" id="q-app" placeholder="Most-used app 👀" />
+          <input type="text" data-q="Last Google search" placeholder="Last Google search 🔍" />
+        </div>
+        <div class="pick-label">or tap your most-used app 👇</div>
+        <div class="chips quick" data-target="#q-app">
+          <button type="button">Instagram 📸</button>
+          <button type="button">WhatsApp 💬</button>
+          <button type="button">YouTube ▶️</button>
+          <button type="button">TikTok 🎵</button>
+          <button type="button">Spotify 🎧</button>
+          <button type="button">Reddit 👽</button>
+        </div>
+      </div>
+
+      <div class="card" data-emoji="🤫">
+        <div class="q">Okay spill some gossip 👀<small>About the group, our common friends, who's up to what — you know I need to know</small></div>
+        <textarea data-q="The gossip 🤭" placeholder="Who did what now?? 🍵 (kept between us, promise)"></textarea>
+      </div>
+
+      <div class="card" data-emoji="�">
+        <div class="q">The old crew — let's account for everyone 🕵️<small>Who from the group are you still in touch with?</small></div>
+        <input type="text" data-q="Still in touch with" placeholder="Names you still talk to 💬" />
+        <div class="q" style="margin-top:14px">Who have you totally lost contact with?</div>
+        <input type="text" data-q="Lost contact with" placeholder="Whatever happened to... 👻" />
+        <div class="q" style="margin-top:14px">Any group/common-friend news, drama or updates?</div>
+        <textarea data-q="Group news & updates" placeholder="Weddings, breakups, glow-ups, beef... lay it all out 🍿"></textarea>
+        <div class="q" style="margin-top:14px">Who do we 100% need at the next reunion?</div>
+        <input type="text" data-q="Reunion must-invites" placeholder="The non-negotiables 🎉" />
+      </div>
+
+      <div class="card" data-emoji="�📊">
+        <div class="q">How nostalgic are you feeling right now?</div>
+        <div class="slider-wrap">
+          <span>😎</span>
+          <input type="range" min="0" max="100" value="50" data-q="Nostalgia level" id="nostalgia" />
+          <span class="slider-val" id="nostalgiaVal">50%</span>
+          <span>🥹</span>
+        </div>
+      </div>
+
+      <div class="card" data-emoji="🌟">
+        <div class="q">If we could teleport anywhere together tomorrow, where to?</div>
+        <input type="text" data-q="Dream trip together" id="q-trip" placeholder="Destination + who's driving 🚗" />
+        <div class="pick-label">or just tap one 👇</div>
+        <div class="chips quick" data-target="#q-trip">
+          <button type="button">Beach getaway 🏖️</button>
+          <button type="button">Mountain escape ⛰️</button>
+          <button type="button">Euro trip ✈️</button>
+          <button type="button">Back to our hometown 🏡</button>
+          <button type="button">Epic road trip 🚗</button>
+          <button type="button">Anywhere with the crew 💕</button>
+        </div>
+      </div>
+
+      <div class="card" data-emoji="💭">
+        <div class="q">Something the younger you would NOT believe about your life now</div>
+        <textarea data-q="Younger me wouldn't believe" placeholder="Plot twist of the decade..."></textarea>
+      </div>
+
+      <div class="card" data-emoji="🎁">
+        <div class="q">One thing on your bucket list this year</div>
+        <input type="text" data-q="This year's goal" id="q-goal" placeholder="Make it happen ✅" />
+        <div class="pick-label">or just tap one 👇</div>
+        <div class="chips quick" data-target="#q-goal">
+          <button type="button">Travel more ✈️</button>
+          <button type="button">Get fit 💪</button>
+          <button type="button">Save money 💰</button>
+          <button type="button">Switch careers 🔀</button>
+          <button type="button">Find love ❤️</button>
+          <button type="button">Just survive 😅</button>
+        </div>
+      </div>
+
+      <div class="card" data-emoji="💌">
+        <div class="q">A message for me / the group — sappy or savage, your call</div>
+        <textarea data-q="Message for the squad" placeholder="Leave your mark 🖊️"></textarea>
+      </div>
+
+      <div class="card" data-emoji="🤝">
+        <div class="q">Real talk — when are we actually meeting up?</div>
+        <select data-q="When are we meeting">
+          <option value="">Pick one (no pressure 👀)</option>
+          <option>This week, I'm not even joking</option>
+          <option>This month for sure</option>
+          <option>Next time you're in town</option>
+          <option>Big reunion, let's plan it</option>
+          <option>We'll say "soon" forever 😭</option>
+        </select>
+      </div>
+
+      <div class="actions">
+        <button type="button" class="btn btn-primary" id="generate">✨ Generate my Slambook page</button>
+        <p class="hint">Then download it as an image & send it back to whoever shared this with you 💕</p>
+      </div>
+    </form>
+
+    <!-- RESULT -->
+    <div class="result hidden" id="resultArea">
+      <div id="shareCard">
+        <div class="sc-head">
+          <div class="sc-ava" id="scAva">🙂</div>
+          <div>
+            <div class="sc-name" id="scName">—</div>
+            <div class="sc-sub" id="scSub">The Forever Slambook · catching up since forever</div>
+          </div>
+        </div>
+        <div class="sc-grid" id="scGrid"></div>
+        <div class="sc-foot">💌 Filled with love · The Forever Slambook</div>
+      </div>
+
+      <div class="actions">
+        <button type="button" class="btn btn-yellow" id="download">⬇️ Download as image</button>
+        <button type="button" class="btn btn-ghost" id="copyText">📋 Copy as text</button>
+        <button type="button" class="btn btn-ghost" id="edit">✏️ Edit my answers</button>
+      </div>
+    </div>
+
+    <footer>
+      Made with 💖 for old friends who never really drifted.<br />
+      <b>Tip:</b> Host this page once, share the link with everyone, collect everyone's pages back.
+    </footer>
+  </div>
+
+  <div class="toast" id="toast">Copied! 📋</div>
+
+<script>
+(function(){
+  const avatars = ["😎","🥰","🤓","🦄","🐱","🐸","👽","🧚","🦖","🌈","🍕","🎸","🪩","👑","🦋","🐙"];
+  const avaWrap = document.getElementById('avatars');
+  let chosenAvatar = avatars[0];
+  avatars.forEach((a,i)=>{
+    const b=document.createElement('button');
+    b.type='button'; b.textContent=a;
+    if(i===0) b.classList.add('sel');
+    b.onclick=()=>{ avaWrap.querySelectorAll('button').forEach(x=>x.classList.remove('sel'));
+      b.classList.add('sel'); chosenAvatar=a; updateProgress(); };
+    avaWrap.appendChild(b);
+  });
+
+  // chips multi-select (mood/wellbeing groups)
+  document.querySelectorAll('.chips:not(.quick)').forEach(group=>{
+    group.querySelectorAll('button').forEach(btn=>{
+      btn.onclick=()=>{ btn.classList.toggle('sel'); updateProgress(); };
+    });
+  });
+
+  // quick-pick chips: tap to fill the linked field (single choice)
+  document.querySelectorAll('.chips.quick').forEach(group=>{
+    const target=document.querySelector(group.getAttribute('data-target'));
+    if(!target) return;
+    group.querySelectorAll('button').forEach(btn=>{
+      btn.onclick=()=>{
+        const already=btn.classList.contains('sel');
+        group.querySelectorAll('button').forEach(b=>b.classList.remove('sel'));
+        if(already){ target.value=''; }
+        else { btn.classList.add('sel'); target.value=btn.textContent.trim(); }
+        updateProgress();
+      };
+    });
+    // typing clears the quick selection
+    target.addEventListener('input',()=>{
+      if(document.activeElement===target)
+        group.querySelectorAll('button').forEach(b=>b.classList.remove('sel'));
+    });
+  });
+
+  // nostalgia slider
+  const nost=document.getElementById('nostalgia'), nostVal=document.getElementById('nostalgiaVal');
+  nost.oninput=()=>{ nostVal.textContent=nost.value+'%'; };
+
+  // progress
+  const fill=document.getElementById('progressFill'), label=document.getElementById('progressLabel');
+  const inputs=[...document.querySelectorAll('#slambook input[type=text], #slambook textarea, #slambook select')];
+  function countFilled(){
+    let total=inputs.length+1; // +1 for chips
+    let done=inputs.filter(i=>i.value.trim()!=='').length;
+    if(document.querySelector('.chips:not(.quick) button.sel')) done++;
+    return {done,total};
+  }
+  function updateProgress(){
+    const {done,total}=countFilled();
+    const pct=Math.round(done/total*100);
+    fill.style.width=pct+'%';
+    let msg = pct===0?"0% filled — let's gooo 🚀":
+              pct<40?pct+"% — warming up ☕":
+              pct<70?pct+"% — you're on a roll 🎢":
+              pct<100?pct+"% — almost there, don't ghost 👻":
+              "100% — legend! hit generate ✨";
+    label.textContent=msg;
+  }
+  inputs.forEach(i=>i.addEventListener('input',updateProgress));
+  updateProgress();
+
+  // ---- collect answers ----
+  function collect(){
+    const data=[];
+    document.querySelectorAll('[data-q]').forEach(el=>{
+      const q=el.getAttribute('data-q');
+      if(q==='Avatar') return;
+      if(el.classList.contains('chips')){
+        const vals=[...el.querySelectorAll('button.sel')].map(b=>b.textContent.trim());
+        if(vals.length) data.push([q, vals.join(' · ')]);
+        return;
+      }
+      if(el.id==='nostalgia'){ data.push([q, el.value+'%']); return; }
+      if(el.value && el.value.trim()!==''){ data.push([q, el.value.trim()]); }
+    });
+    return data;
+  }
+
+  // ---- generate ----
+  const result=document.getElementById('resultArea');
+  document.getElementById('generate').onclick=()=>{
+    const nameInput=document.querySelector('[data-q="Name / Nickname"]');
+    if(!nameInput.value.trim()){ nameInput.focus(); toast("Add your name first 🙈"); return; }
+    const data=collect();
+    const where=document.querySelector('[data-q="Where are you now?"]').value.trim();
+    document.getElementById('scAva').textContent=chosenAvatar;
+    document.getElementById('scName').textContent=nameInput.value.trim();
+    document.getElementById('scSub').textContent=(where?('📍 '+where+' · '):'')+'The Forever Slambook';
+    const grid=document.getElementById('scGrid'); grid.innerHTML='';
+    data.forEach(([q,a])=>{
+      if(q==='Name / Nickname'||q==='Where are you now?') return;
+      const item=document.createElement('div'); item.className='sc-item';
+      item.innerHTML=`<div class="sc-q">${esc(q)}</div><div class="sc-a">${esc(a)}</div>`;
+      grid.appendChild(item);
+    });
+    result.classList.remove('hidden');
+    result.scrollIntoView({behavior:'smooth'});
+  };
+
+  document.getElementById('edit').onclick=()=>{
+    result.classList.add('hidden');
+    document.getElementById('slambook').scrollIntoView({behavior:'smooth'});
+  };
+
+  // ---- download as image ----
+  document.getElementById('download').onclick=()=>{
+    const card=document.getElementById('shareCard');
+    const name=(document.getElementById('scName').textContent||'slambook').replace(/[^a-z0-9]/gi,'-').toLowerCase();
+    html2canvas(card,{scale:2,backgroundColor:null,useCORS:true}).then(canvas=>{
+      const link=document.createElement('a');
+      link.download='slambook-'+name+'.png';
+      link.href=canvas.toDataURL('image/png');
+      link.click();
+      toast("Saved! Now send it back 💌");
+    });
+  };
+
+  // ---- copy as text ----
+  document.getElementById('copyText').onclick=()=>{
+    const name=document.getElementById('scName').textContent;
+    const ava=document.getElementById('scAva').textContent;
+    let txt=`${ava} ${name} — The Forever Slambook\n\n`;
+    document.querySelectorAll('#scGrid .sc-item').forEach(it=>{
+      txt+=`• ${it.querySelector('.sc-q').textContent}: ${it.querySelector('.sc-a').textContent}\n`;
+    });
+    txt+=`\n💌 Filled with love.`;
+    (navigator.clipboard?navigator.clipboard.writeText(txt):Promise.reject())
+      .then(()=>toast("Copied! Paste & send 📋"))
+      .catch(()=>{ prompt("Copy this:",txt); });
+  };
+
+  function esc(s){return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
+  const toastEl=document.getElementById('toast');
+  let toastT;
+  function toast(msg){ toastEl.textContent=msg; toastEl.classList.add('show');
+    clearTimeout(toastT); toastT=setTimeout(()=>toastEl.classList.remove('show'),2200); }
+})();
+</script>
+</body>
+</html>
